@@ -1,0 +1,527 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Subsidieregister",
+    "description" : "Het subsidieregister biedt een actueel overzicht van subsidies verleent door de provincie Zuid-Holland. Het gaat om openbare subsidies in de periode vanaf 2015.",
+    "version" : "1.0"
+  },
+  "externalDocs" : {
+    "description" : "Webpagina van het subsidieregister",
+    "url" : "https://subsidieregister.zuid-holland.nl"
+  },
+  "servers" : [ {
+    "url" : "https://subsidieregister.zuid-holland.nl/api"
+  } ],
+  "paths" : {
+    "/jaarbedragen" : {
+      "get" : {
+        "description" : "Totaalbedrag aan verleende subsidies in euro's per jaar.",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/jaarbedragen"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/aanvrager" : {
+      "get" : {
+        "description" : "Aanvragers van verleende subsidies.",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/aanvragers"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subsidies" : {
+      "get" : {
+        "description" : "Verleende subsidies",
+        "parameters" : [ {
+          "name" : "pageno",
+          "in" : "query",
+          "description" : "Paginanummer voor paginering. Per pagina worden maximaal 20 verleende subsidies geretourneerd. Raadpleeg `totaalnrofpages` voor het totaal aantal pagina's.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "example" : 1
+        }, {
+          "name" : "aanvragernaam",
+          "in" : "query",
+          "description" : "Naam van de aanvrager. In sommige gevallen is de naam vervangen door 'AVG restrictie' om de privacy van de aanvrager te beschermen.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Stichting Greenport Westland Oostland"
+        }, {
+          "name" : "minaangevraagdbedrag",
+          "in" : "query",
+          "description" : "Het laagste subsidiebedrag in euro's dat is aangevraagd.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "number",
+            "format" : "float",
+            "default" : 0
+          },
+          "example" : 0
+        }, {
+          "name" : "maxaangevraagdbedrag",
+          "in" : "query",
+          "description" : "Het hoogste bedrag in euro's dat is aangevraagd.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "number",
+            "format" : "float"
+          },
+          "example" : 50000000
+        }, {
+          "name" : "minverleendbedrag",
+          "in" : "query",
+          "description" : "Het laagste bedrag in euro's dat is verleend.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "number",
+            "format" : "float",
+            "default" : 0
+          },
+          "example" : 0
+        }, {
+          "name" : "maxverleendbedrag",
+          "in" : "query",
+          "description" : "Het hoogste bedrag in euro's dat is verleend.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 0,
+            "type" : "number",
+            "format" : "float"
+          },
+          "example" : 50000000
+        }, {
+          "name" : "programmakey",
+          "in" : "query",
+          "description" : "Identificatienummer dat verwijst naar een programma. Je kunt alle identificatienummers en de bijbehorende programma's opvragen door een request te doen zónder query parameters en in de response te kijken naar de inhoud van de JSON array `programmanaam`.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "example" : 1013262877
+        }, {
+          "name" : "doelstellingkey",
+          "in" : "query",
+          "description" : "Identificatienummer dat verwijst naar een doelstelling. Je kunt alle identificatienummers en de bijbehorende doelstellingen opvragen door een request te doen zónder query parameters en in de response te kijken naar de inhoud van de JSON array `doelstellingnaam`.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "example" : 227150286
+        }, {
+          "name" : "regelingkey",
+          "in" : "query",
+          "description" : "Identificatienummer dat verwijst naar een subsidieregeling. Je kunt alle identificatienummers en de bijbehorende regelingen opvragen door een request te doen zónder query parameters en in de response te kijken naar de inhoud van de JSON array `regelingnaam`.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          },
+          "example" : 1101575688
+        }, {
+          "name" : "jaar",
+          "in" : "query",
+          "description" : "Jaar",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 2015,
+            "type" : "integer"
+          },
+          "example" : 2019
+        }, {
+          "name" : "sortfield",
+          "in" : "query",
+          "description" : "Attribuut waarop subsidies gesorteerd worden.",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "jaar"
+        }, {
+          "name" : "sortdir",
+          "in" : "query",
+          "description" : "Richting van de sortering (oplopend of aflopend).",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "default" : "desc",
+            "enum" : [ "asc", "desc" ]
+          },
+          "example" : "asc"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/subsidies"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "jaarbedragen" : {
+        "type" : "array",
+        "example" : [ {
+          "Jaar" : 2015,
+          "BedragVerleend" : 1.6732600283E8
+        }, {
+          "Jaar" : 2016,
+          "BedragVerleend" : 246934398
+        }, {
+          "Jaar" : 2017,
+          "BedragVerleend" : 1.6469272688E8
+        } ],
+        "items" : {
+          "$ref" : "#/components/schemas/jaarbedragen_inner"
+        }
+      },
+      "aanvragers" : {
+        "type" : "array",
+        "example" : [ "070Energiek Coöperatieve Vereniging U.A.", "1 Deep Ink", "10XL B.V.", "1Arch/Hazenberg Archeologie" ],
+        "items" : {
+          "type" : "string"
+        }
+      },
+      "subsidies" : {
+        "type" : "object",
+        "properties" : {
+          "jaar" : {
+            "type" : "array",
+            "example" : [ {
+              "key" : 2015,
+              "name" : 2015
+            }, {
+              "key" : 2016,
+              "name" : 2016
+            }, {
+              "key" : 2017,
+              "name" : 2017
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/subsidies_jaar"
+            }
+          },
+          "doelstellingnaam" : {
+            "type" : "array",
+            "example" : [ {
+              "key" : 1084882766,
+              "name" : "Beschermd, bekend en beleefbaar cultureel erfgoed"
+            }, {
+              "key" : 227150286,
+              "name" : "Borgen kennis sociaal domein"
+            }, {
+              "key" : 553838533,
+              "name" : "Duurzame landbouw"
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/subsidies_doelstellingnaam"
+            }
+          },
+          "programmanaam" : {
+            "type" : "array",
+            "example" : [ {
+              "key" : 1068309732,
+              "name" : "Aantrekkelijk en Concurrerend"
+            }, {
+              "key" : 941543275,
+              "name" : "Bereikbaar en Verbonden"
+            }, {
+              "key" : 1013262877,
+              "name" : "Bestuur en Samenleving"
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/subsidies_programmanaam"
+            }
+          },
+          "regelingnaam" : {
+            "type" : "array",
+            "example" : [ {
+              "key" : 1043506132,
+              "name" : "Agrarische natuurvereniging Vockestaert -Experimenten IODS zwaar beheer Mid-Delftland"
+            }, {
+              "key" : 1101575688,
+              "name" : "Algemene subsidieverordening"
+            }, {
+              "key" : 1228554913,
+              "name" : "BDU 2013 - 10.2 Bedrijfsvervoer"
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/subsidies_regelingnaam"
+            }
+          },
+          "bedragen" : {
+            "$ref" : "#/components/schemas/subsidies_bedragen"
+          },
+          "paging" : {
+            "$ref" : "#/components/schemas/subsidies_paging"
+          },
+          "results" : {
+            "type" : "array",
+            "example" : [ {
+              "jaar" : 2017,
+              "aanvrager" : "Gemeente Zuidplas",
+              "aangevraagdbedrag" : 20000,
+              "verleendbedrag" : 20000,
+              "doelstellingnaam" : "Een adequaat aanbod van openbaar vervoer",
+              "programmanaam" : "Bereikbaar en Verbonden",
+              "regelingnaam" : "Mob 2017-  8 toegankelijkheid bushaltelocaties",
+              "projectnaam" : "T1701 Toegankelijkheid bushaltelocaties",
+              "dossiernummer" : "DOS-2016-0008588"
+            }, {
+              "jaar" : 2018,
+              "aanvrager" : "Gemeente Ridderkerk",
+              "aangevraagdbedrag" : 20000,
+              "verleendbedrag" : 20000,
+              "doelstellingnaam" : "Natuur en biodiversiteit",
+              "programmanaam" : "Groen, Waterrijk en Schoon",
+              "regelingnaam" : "voet en fietsveren Ridderkerk",
+              "projectnaam" : "begroting project Driehoeksveer Ridderkerk-Krimpenerwaard-Molenwaard",
+              "dossiernummer" : "DOS-2017-0006560"
+            }, {
+              "jaar" : 2017,
+              "aanvrager" : "AVG restrictie",
+              "aangevraagdbedrag" : 20000,
+              "verleendbedrag" : 20000,
+              "doelstellingnaam" : "Duurzame landbouw",
+              "programmanaam" : "Groen, Waterrijk en Schoon",
+              "regelingnaam" : "Srg 2.4 groenparticipatie",
+              "projectnaam" : "Verduurzaming boerderij",
+              "dossiernummer" : "DOS-2017-0000821"
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/subsidies_results"
+            }
+          }
+        }
+      },
+      "jaarbedragen_inner" : {
+        "type" : "object",
+        "properties" : {
+          "Jaar" : {
+            "type" : "integer",
+            "description" : "Jaar"
+          },
+          "BedragVerleend" : {
+            "type" : "number",
+            "description" : "Verleend subsidiebedrag in euro's",
+            "format" : "float"
+          }
+        }
+      },
+      "subsidies_jaar" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "integer",
+            "description" : "Identificatienummer"
+          },
+          "name" : {
+            "type" : "integer",
+            "description" : "Jaar"
+          }
+        }
+      },
+      "subsidies_doelstellingnaam" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "integer",
+            "description" : "Identificatienummer"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Doelstelling"
+          }
+        }
+      },
+      "subsidies_programmanaam" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "integer",
+            "description" : "Identificatienummer"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Naam van het programma"
+          }
+        }
+      },
+      "subsidies_regelingnaam" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "integer",
+            "description" : "Identificatienummer"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Naam van de subsidieregeling"
+          }
+        }
+      },
+      "subsidies_bedragen" : {
+        "type" : "object",
+        "properties" : {
+          "maxaangevraagdbedrag" : {
+            "type" : "number",
+            "description" : "Hoogste aangevraagd subsidiebedrag in euro's",
+            "format" : "float"
+          },
+          "minaangevraagdbedrag" : {
+            "type" : "number",
+            "description" : "Laagste aangevraagd subsidiebedrag in euro's",
+            "format" : "float"
+          },
+          "maxverleendbedrag" : {
+            "type" : "number",
+            "description" : "Hoogste verleend subsidiebedrag in euro's",
+            "format" : "float"
+          },
+          "minverleendbedrag" : {
+            "type" : "number",
+            "description" : "Laagste verleend subsidiebedrag in euro's",
+            "format" : "float"
+          },
+          "maxminaangevraagdbedrag" : {
+            "type" : "array",
+            "description" : "Laagste en hoogste aangevraagd subsidiebedrag in euro's",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          },
+          "maxminverleendbedrag" : {
+            "type" : "array",
+            "description" : "Laagste en hoogste verleend subsidiebedrag in euro's",
+            "items" : {
+              "type" : "number",
+              "format" : "float"
+            }
+          }
+        },
+        "example" : "{\"maxaangevraagdbedrag\":299790,\"minaangevraagdbedrag\":538.51,\"maxverleendbedrag\":20000,\"minverleendbedrag\":445,\"maxminaangevraagdbedrag\":[538.51,299790],\"maxminverleendbedrag\":[445,20000]}"
+      },
+      "subsidies_paging" : {
+        "type" : "object",
+        "properties" : {
+          "pageno" : {
+            "type" : "integer",
+            "description" : "Paginanummer"
+          },
+          "rowcountperpage" : {
+            "type" : "integer",
+            "description" : "Maximum aantal resultaten per pagina"
+          },
+          "nrofrows" : {
+            "type" : "integer",
+            "description" : "Totaal aantal resultaten op de pagina"
+          },
+          "totaalnrofpages" : {
+            "type" : "integer",
+            "description" : "Totaal aantal pagina's"
+          }
+        },
+        "example" : "{\"pageno\":1,\"rowcountperpage\":20,\"nrofrows\":811,\"totaalnrofpages\":41}"
+      },
+      "subsidies_results" : {
+        "type" : "object",
+        "properties" : {
+          "jaar" : {
+            "type" : "integer",
+            "description" : "Jaar"
+          },
+          "aanvrager" : {
+            "type" : "string",
+            "description" : "Naam van de aanvrager"
+          },
+          "aangevraagdbedrag" : {
+            "type" : "number",
+            "description" : "Aangevraagd bedrag in euro's",
+            "format" : "float"
+          },
+          "verleendbedrag" : {
+            "type" : "number",
+            "description" : "Verleend bedrag in euro's",
+            "format" : "float"
+          },
+          "doelstellingnaam" : {
+            "type" : "string",
+            "description" : "Doelstelling"
+          },
+          "programmanaam" : {
+            "type" : "string",
+            "description" : "Naam van het programma"
+          },
+          "regelingnaam" : {
+            "type" : "string",
+            "description" : "Naam van de subsidieregeling"
+          },
+          "projectnaam" : {
+            "type" : "string",
+            "description" : "Projectnaam"
+          },
+          "dossiernummer" : {
+            "type" : "string",
+            "description" : "Dossiernummer"
+          }
+        }
+      }
+    }
+  }
+}
