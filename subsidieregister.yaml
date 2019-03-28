@@ -2,6 +2,9 @@ openapi: 3.0.1
 info:
   title: Subsidieregister
   description: Het subsidieregister biedt een actueel overzicht van subsidies verleent door de provincie Zuid-Holland. Het gaat om openbare subsidies in de periode vanaf 2015.
+  license:
+    name: CC0 - Creative Commons
+    url: https://creativecommons.org/share-your-work/public-domain/cc0/
   version: "1.0"
 externalDocs:
   description: Webpagina van het subsidieregister
